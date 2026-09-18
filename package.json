@@ -1,0 +1,13 @@
+{
+  "name": "dinto-tool-register",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Dinto Tool Register — monthly QR-scan tool audit for Paul Dinto Electrical Contractors.",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}
