@@ -12,7 +12,10 @@ export function adminNav(current) {
   const link = (href, label, key) =>
     el('a', { href, 'data-link': '', ...(current === key ? { 'aria-current': 'page' } : {}) }, label);
   return el('nav', { class: 'nav' },
-    el('a', { class: 'nav-brand', href: '/admin/jobs', 'data-link': '', style: { color: 'inherit', textDecoration: 'none' } }, CONFIG.BRAND),
+    el('a', {
+      class: 'nav-brand', href: '/admin/jobs', 'data-link': '',
+      style: { color: 'inherit', textDecoration: 'none' },
+    }, CONFIG.BRAND),
     link('/admin/jobs', 'Jobs', 'jobs'),
     link('/admin/reports', 'Reports', 'reports'),
     el('span', { class: 'nav-user' }, `${CONFIG.ADMIN_NAME} · ${CONFIG.ADMIN_ROLE}`),
@@ -27,6 +30,20 @@ export function adminShell(current, ...body) {
   );
 }
 
+// Small labelled-field helper (label + control), matching .field markup.
+export function fieldWrap(label, control, extra = '') {
+  return el('label', { class: `field ${extra}`.trim() },
+    el('span', {
+      style: {
+        display: 'block', fontSize: '12px', marginBottom: '5px',
+        color: 'color-mix(in srgb, var(--color-text) 70%, transparent)',
+      },
+      text: label,
+    }),
+    control,
+  );
+}
+
 /* ── screen ──────────────────────────────────────────────────────── */
 export function screenJobs(ctx) {
   mount(adminShell('jobs', centerNote('Loading…')));
@@ -35,8 +52,11 @@ export function screenJobs(ctx) {
 
 async function load(ctx) {
   let data;
-  try { data = await api.listJobs(); }
-  catch (e) { return mount(adminShell('jobs', centerNote('Couldn’t load jobs', e.message))); }
+  try {
+    data = await api.listJobs();
+  } catch (e) {
+    return mount(adminShell('jobs', centerNote('Couldn’t load jobs', e.message)));
+  }
   render(data, ctx);
 }
 
@@ -51,8 +71,10 @@ function render(data, ctx) {
       el('div', { class: 'page-subline', text: subline }),
     ),
     el('div', { class: 'spacer' }),
-    el('button', { class: 'btn btn-primary', type: 'button', text: 'New job',
-      onClick: () => focusNewJob() }),
+    el('button', {
+      class: 'btn btn-primary', type: 'button', text: 'New job',
+      onClick: () => focusNewJob(),
+    }),
   );
 
   mount(adminShell('jobs', head, jobsTable(data.jobs), newJobCard(ctx)));
@@ -69,7 +91,10 @@ function jobsTable(jobs) {
 
   if (!jobs.length) {
     wrap.appendChild(el('div', { class: 'gt-row', style: { gridTemplateColumns: '1fr' } },
-      el('span', { style: { color: 'var(--color-neutral-500)' }, text: 'No jobs yet. Create your first job below.' })));
+      el('span', {
+        style: { color: 'var(--color-neutral-500)' },
+        text: 'No jobs yet. Create your first job below.',
+      })));
     return wrap;
   }
 
@@ -111,21 +136,11 @@ function newJobCard(ctx) {
   return el('div', { class: 'card entry-card' },
     el('div', { class: 'card-kicker', text: 'New job' }),
     el('div', { class: 'entry-row' },
-      el('label', { class: 'field grow2' }, el('span', { class: 'field', style: { display: 'none' } }), name)
-        && fieldWrap('Job name', name, 'grow2'),
+      fieldWrap('Job name', name, 'grow2'),
       fieldWrap('Foreman', foreman, ''),
       submit,
     ),
     errLine,
-  );
-}
-
-// Small labelled-field helper (label + control), matching .field markup.
-function fieldWrap(label, control, extra) {
-  return el('label', { class: `field ${extra}`.trim() },
-    el('span', { style: { display: 'block', fontSize: '12px', marginBottom: '5px',
-      color: 'color-mix(in srgb, var(--color-text) 70%, transparent)' }, text: label }),
-    control,
   );
 }
 
