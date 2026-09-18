@@ -1,0 +1,26 @@
+# Netlify configuration — Dinto Tool Register
+# Static front-end served from the repo root. The API is a single
+# Functions v2 handler that declares its own route (/api/*) via
+# `export const config`, so no redirect is needed to reach it.
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+  command = "echo 'No build step — static front-end.'"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[functions]
+  node_bundler = "esbuild"
+
+# SPA fallback: any path that isn't a real static file or the /api/*
+# function is handed to index.html, where the client-side router renders
+# the right screen. This is what makes clean routes like /t/<token> and
+# /admin/jobs/<id> work on refresh and on a cold scan.
+# Non-forced (default status 200 rewrite) so it never shadows a static
+# asset or the function.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
