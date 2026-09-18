@@ -1,0 +1,282 @@
+/* css/app.css
+   Screen-specific layout for the Tool Register. Depends on nocturne.css.
+   Organised: utilities · mobile scan (2a/2c) · month list (2b) ·
+   admin frame · grid-tables (3a/3b) · label sheet (3c) · report (2d/4e) ·
+   row menu (4a) · responsive · print. */
+
+#app { min-height: 100%; }
+[hidden] { display: none !important; }
+
+/* Phosphor check/magnifier are inlined as <svg> by ui.js; these size them. */
+.icon { width: 1em; height: 1em; display: block; flex: none; }
+
+/* Inline error / retry line used by the scan and admin forms. */
+.err-line { color: var(--color-accent-300); font-size: 13px; margin-top: 10px; }
+.btn.is-pending { opacity: 0.6; pointer-events: none; }
+
+/* ══ MOBILE SCAN PAGES (2a / 2c) ═══════════════════════════════════ */
+.scan {
+  min-height: 100dvh;
+  max-width: 460px;               /* reflows to any phone width; centred on desktop */
+  margin: 0 auto;
+  display: flex; flex-direction: column;
+  padding: 76px 22px 40px;
+  padding-top: max(76px, calc(env(safe-area-inset-top, 0px) + 40px));
+  padding-bottom: max(40px, env(safe-area-inset-bottom, 0px));
+}
+.scan-eyebrow {
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+  font-size: 13px; font-weight: 500; letter-spacing: 0.14em;
+  color: var(--color-neutral-500);
+}
+.scan-tool { font-size: 33px; line-height: 1.15; font-weight: 500; color: var(--color-text); margin-top: 16px; }
+.scan-job { font-size: 14px; color: var(--color-neutral-500); margin-top: 14px; }
+
+/* Question block (2a) — rules top and bottom. */
+.scan-block {
+  margin-top: 42px; padding: 22px 0;
+  border-top: 1px solid var(--color-divider);
+  border-bottom: 1px solid var(--color-divider);
+}
+.scan-q { font-size: 20px; line-height: 1.35; font-weight: 500; color: var(--color-text); }
+.scan-sub { font-size: 13.5px; line-height: 1.6; color: var(--color-neutral-500); margin-top: 10px; }
+
+/* Confirmation block (2c) — replaces the question block. */
+.scan-confirmed { margin-top: 42px; padding: 22px 0; display: flex; gap: 13px; align-items: flex-start; }
+.scan-confirmed .icon { width: 24px; height: 24px; margin-top: 1px; color: var(--color-accent); }
+.scan-confirmed-h { font-size: 20px; line-height: 1.35; font-weight: 500; color: var(--color-text); }
+
+/* The one big glove-friendly button. */
+.scan .btn-confirm { height: 88px; font-size: 21px; margin-top: 34px; }
+.scan .btn-confirm.is-spent { opacity: 0.4; pointer-events: none; }   /* 2c: disabled in place */
+.scan .btn-see { height: 52px; font-size: 15px; margin-top: 12px; }    /* 2c ghost */
+
+.scan-footnote {
+  margin-top: auto; padding-top: 32px;
+  font-size: 12px; line-height: 1.6; color: var(--color-neutral-600);
+}
+
+/* Retired / error terminal state on a scan. */
+.scan-terminal { margin-top: 42px; padding: 22px 0; border-top: 1px solid var(--color-divider); }
+.scan-terminal .scan-q { color: var(--color-neutral-400); }
+
+/* ══ MONTH LIST (2b) ═══════════════════════════════════════════════ */
+.month { max-width: 520px; margin: 0 auto; padding: 66px 0 40px; }
+.month-inset { padding: 0 18px; }        /* header content is inset; rows run edge to edge */
+
+.confirm-banner {
+  margin: 0 18px; padding: 14px 16px; border-radius: 8px;
+  background: var(--color-accent-900); box-shadow: inset 0 0 0 1px var(--color-accent-700);
+  display: flex; align-items: center; gap: 10px;
+  color: var(--color-accent-200); font-size: 13.5px;
+}
+.confirm-banner .icon { width: 18px; height: 18px; color: var(--color-accent); }
+
+.month-h { font-size: 26px; line-height: 1.2; font-weight: 500; color: var(--color-text); padding-top: 26px; }
+.month-subline { font-size: 13px; color: var(--color-neutral-500); margin-top: 8px; }
+
+.progress { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
+.progress-track { flex: 1; height: 7px; border-radius: 4px; background: var(--color-neutral-800); overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 4px; background: var(--color-accent); }
+.progress-count { font-size: 14px; font-variant-numeric: tabular-nums; color: var(--color-text); }
+
+.section-label {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.11em; text-transform: uppercase;
+  color: var(--color-neutral-500); padding: 0 18px 10px;
+}
+.section-label.pad-top { padding-top: 24px; }
+
+.mrow {
+  display: flex; align-items: center; gap: 12px; padding: 13px 18px;
+  border-bottom: 1px solid rgba(233,233,237,.07);
+}
+.mrow-tag {
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+  font-size: 12px; color: var(--color-neutral-600); width: 32px; flex: none;
+}
+.mrow-main { flex: 1; min-width: 0; }
+.mrow-name { font-size: 14.5px; color: var(--color-text); }
+.mrow-warn { font-size: 11.5px; color: var(--color-accent-300); margin-top: 3px; }
+.mrow-time { font-size: 11.5px; color: var(--color-neutral-500); margin-top: 3px; }
+.mrow.is-present { opacity: 0.55; }
+.mrow .mrow-check { width: 16px; height: 16px; color: var(--color-accent); flex: none; }
+
+/* ══ ADMIN FRAME ═══════════════════════════════════════════════════ */
+.admin { display: block; }
+.admin-body { max-width: 1040px; margin: 0 auto; padding: 26px 24px 30px; }
+.crumb { font-size: 11.5px; color: var(--color-neutral-600); margin-bottom: 13px; }
+.crumb a { color: inherit; text-decoration: none; }
+.crumb a:hover { color: var(--color-accent); }
+
+.page-head { display: flex; align-items: baseline; gap: 16px; }
+.page-title { font-size: 24px; line-height: 1.2; font-weight: 500; color: var(--color-text); }
+.page-title.sub { font-size: 22px; }
+.page-subline { font-size: 12.5px; color: var(--color-neutral-500); margin-top: 7px; }
+.page-head .spacer { margin-left: auto; }
+.page-head .actions { margin-left: auto; display: flex; gap: 10px; }
+
+/* Data-entry cards (new job / add a tool). */
+.entry-card { margin-top: 18px; padding: 20px 22px; gap: var(--space-3); }
+.entry-row { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
+.entry-row .field { flex: 1 1 180px; }
+.entry-row .field.grow2 { flex: 2 1 240px; }
+.entry-row .field.narrow { flex: 0 0 110px; }
+.next-tag { font-size: 12px; color: var(--color-neutral-500); white-space: nowrap; align-self: center; padding-bottom: 8px; }
+.next-tag b { font-family: var(--font-mono); font-weight: 500; color: var(--color-accent-300); }
+.help { font-size: 11.5px; line-height: 1.6; color: var(--color-neutral-600); }
+
+/* ══ GRID-TABLES (3a / 3b) ═════════════════════════════════════════ */
+.gt { --cols: 1fr; }
+.gt-wrap { padding: 0; overflow: hidden; }         /* .card padding:0 */
+.gt-head {
+  display: grid; grid-template-columns: var(--cols); gap: 16px; align-items: center;
+  padding: 12px 20px;
+  font-size: 10px; font-weight: 500; letter-spacing: 0.11em; text-transform: uppercase;
+  color: var(--color-neutral-600);
+}
+.gt-row {
+  display: grid; grid-template-columns: var(--cols); gap: 16px; align-items: center;
+  padding: 11px 20px; border-top: 1px solid rgba(233,233,237,.07);
+  font-size: 12.5px; color: var(--color-neutral-300); text-decoration: none;
+}
+a.gt-row { cursor: pointer; }
+.gt-row:hover { background: rgba(145,132,217,.06); }
+.gt-name { color: var(--color-text); font-weight: 500; }
+.gt-num { font-variant-numeric: tabular-nums; }
+.gt-mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--color-neutral-500); }
+.gt-mono.unprinted { color: var(--color-accent-300); }   /* tag whose label isn't printed */
+.gt-link { color: var(--color-accent); }
+.gt-actions { display: flex; justify-content: flex-end; position: relative; }
+
+/* "…" trigger for the row menu. */
+.dots {
+  width: 30px; height: 28px; border: 0; background: transparent; cursor: pointer;
+  color: var(--color-neutral-500); font-size: 18px; line-height: 1; border-radius: var(--radius-sm);
+}
+.dots:hover { color: var(--color-text); background: color-mix(in srgb, var(--color-text) 8%, transparent); }
+
+/* ══ LABEL SHEET (3c) ══════════════════════════════════════════════ */
+.label-controls { display: flex; gap: 40px; margin-bottom: 18px; flex-wrap: wrap; }
+.label-controls .ctl-label { display: block; margin-bottom: 8px; }
+.sheet {
+  background: var(--color-neutral-100); border-radius: 8px; padding: 26px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+}
+.label-cell {
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  padding: 12px; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--color-neutral-300);
+  background: var(--color-neutral-100);
+}
+.label-cell svg { width: 86px; height: 86px; display: block; }   /* QR: ink #161826 on #f3f5fe */
+.label-num {
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+  font-size: 22px; font-weight: 600; letter-spacing: 0.1em; color: var(--color-bg);
+}
+.sheet-empty { grid-column: 1 / -1; text-align: center; color: var(--color-neutral-600); padding: 30px; font-size: 13px; }
+
+/* ══ REPORT (2d / 4e) — real tables so print repeats headers ═══════ */
+.report-filters { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.report-filters .field { flex: 0 0 190px; }
+.report-filters .actions { margin-left: auto; display: flex; gap: 10px; }
+
+.rtable { width: 100%; border-collapse: collapse; }
+.rtable caption {
+  text-align: left; font-size: 10px; font-weight: 500; letter-spacing: 0.11em; text-transform: uppercase;
+  color: var(--color-neutral-500); padding: 12px 20px;
+}
+.rtable th {
+  text-align: left; font-size: 10px; font-weight: 500; letter-spacing: 0.11em; text-transform: uppercase;
+  color: var(--color-neutral-600); padding: 12px 20px; border-bottom: 1px solid rgba(233,233,237,.07);
+}
+.rtable td {
+  padding: 13px 20px; font-size: 12.5px; color: var(--color-neutral-300);
+  border-bottom: 1px solid rgba(233,233,237,.07); vertical-align: top;
+}
+.rtable td.name { color: var(--color-text); font-weight: 500; }
+.rtable td.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--color-neutral-500); }
+.rtable td.num { font-variant-numeric: tabular-nums; }
+.rtable .zero { color: var(--color-neutral-600); }         /* muted 0 in Outstanding */
+.rtable .stale { color: var(--color-accent-300); }         /* last-marked older than prev month */
+.rtable .note { color: var(--color-neutral-400); }
+.rtable tr.is-retired td { opacity: 0.5; }
+.rtable tr.is-open td.closed { color: var(--color-accent); }
+.rtable-foot { font-size: 11.5px; color: var(--color-neutral-600); padding: 12px 20px; }
+.mini-progress { display: flex; align-items: center; gap: 8px; }
+.mini-track { flex: 1; height: 5px; border-radius: 3px; background: var(--color-neutral-800); overflow: hidden; min-width: 60px; }
+.mini-fill { height: 100%; background: var(--color-accent); }
+
+/* ══ ROW MENU (4a) ═════════════════════════════════════════════════ */
+.menu {
+  position: absolute; top: 100%; right: 0; z-index: 40; margin-top: 4px;
+  min-width: 240px; padding: 6px; border-radius: var(--radius-md);
+  background: var(--color-surface); box-shadow: var(--shadow-md);
+}
+.menu-item {
+  display: block; width: 100%; text-align: left; border: 0; background: transparent; cursor: pointer;
+  font: inherit; font-size: 14px; color: var(--color-text);
+  padding: 10px 12px; border-radius: var(--radius-sm);
+}
+.menu-item:hover, .menu-item:focus-visible { background: color-mix(in srgb, var(--color-accent) 12%, transparent); }
+.menu-sep { height: 1px; margin: 6px 4px; background: var(--color-divider); }
+.menu-item.destructive { color: var(--color-accent-300); }
+
+/* ══ RESPONSIVE — admin tables collapse to stacked cards < 760px ═══ */
+@media (max-width: 760px) {
+  .gt-head { display: none; }
+  .gt-row {
+    grid-template-columns: 1fr !important; gap: 4px;
+    padding: 14px 18px; border-top: 1px solid rgba(233,233,237,.07);
+  }
+  .gt-row > * { display: flex; justify-content: space-between; gap: 12px; }
+  .gt-row > *[data-label]::before {
+    content: attr(data-label); color: var(--color-neutral-600);
+    font-size: 10px; letter-spacing: 0.11em; text-transform: uppercase;
+  }
+  .gt-actions { justify-content: flex-start; }
+  .rtable, .rtable thead, .rtable tbody, .rtable tr, .rtable td, .rtable th { display: block; }
+  .rtable thead { display: none; }
+  .rtable tr { border-bottom: 1px solid rgba(233,233,237,.07); padding: 8px 0; }
+  .rtable td { border: 0; padding: 4px 20px; }
+  .rtable td[data-label]::before {
+    content: attr(data-label) "  "; color: var(--color-neutral-600);
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .sheet { grid-template-columns: repeat(2, 1fr); }
+  .page-head { flex-wrap: wrap; }
+  .page-head .actions { flex-basis: 100%; margin-left: 0; }
+}
+
+/* ══ PRINT ═════════════════════════════════════════════════════════ */
+@media print {
+  [data-noprint] { display: none !important; }
+
+  /* Label sheet: paper, ink-on-white, sized to the chosen stock. The label
+     cell width is driven by --label-in (set on .sheet by labels.js from the
+     size control); 1in ≈ 96px. */
+  body.printing-labels { background: #fff; }
+  body.printing-labels #app > :not(.print-area),
+  body.printing-labels .print-area > :not(.sheet) { display: none !important; }
+  body.printing-labels .sheet {
+    background: #fff; padding: 0; gap: 12px;
+    grid-template-columns: repeat(auto-fill, calc(var(--label-in, 2) * 96px));
+  }
+  body.printing-labels .label-cell {
+    box-shadow: none; break-inside: avoid;
+    width: calc(var(--label-in, 2) * 96px); height: calc(var(--label-in, 2) * 96px);
+    justify-content: center;
+  }
+
+  /* Report: drop chrome, invert to ink on white, keep both tables, repeat
+     the <thead> on every page. */
+  body.printing-report { background: #fff; color: #000; }
+  body.printing-report [data-noprint],
+  body.printing-report .nav { display: none !important; }
+  body.printing-report .card, body.printing-report .rtable { box-shadow: none; background: #fff; }
+  body.printing-report .rtable th,
+  body.printing-report .rtable td,
+  body.printing-report .rtable caption { color: #000 !important; border-color: #999 !important; }
+  body.printing-report .rtable thead { display: table-header-group; }
+  body.printing-report .rtable tr { break-inside: avoid; }
+  body.printing-report .mini-track { background: #ddd; }
+  body.printing-report .mini-fill { background: #444; }
+}
